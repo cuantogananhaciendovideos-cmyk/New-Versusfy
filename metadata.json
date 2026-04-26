@@ -1,0 +1,5 @@
+{
+  "name": "Versusfy",
+  "description": "Versusfy: The ultimate AI-powered comparison engine. Compare prices, specs, and features for millions of products. Get real-time deals, exclusive coupons, and price alerts in your area. Product1 vs Product2 - Find the winner today.",
+  "requestFramePermissions": ["geolocation", "microphone", "camera"]
+}

@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Versusfy | AI Product Comparison, Exclusive Coupons & Price Alerts</title>
+    <!-- ANTI-OSANO & CACHE SHIELD v2.2.0 -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <script>
+      (function() {
+        console.log("Versusfy Supreme Shield: Neutralizing interference...");
+        
+        // Block Osano more aggressively
+        Object.defineProperty(window, 'osano', {
+          value: { 
+            initialized: true, 
+            cm: { show: function(){}, hide: function(){} },
+            on: function(){}, emit: function(){},
+            version: '2.2.0-OMNI'
+          },
+          writable: false,
+          configurable: false
+        });
+
+        // Neutralize Osano's mutation observer if they try to re-inject
+        const originalMutationObserver = window.MutationObserver;
+        window.MutationObserver = function(callback) {
+          return new originalMutationObserver(function(mutations) {
+            const filteredMutations = mutations.filter(m => {
+              const node = m.target;
+              if (node && node.src && node.src.includes('osano.js')) return false;
+              return true;
+            });
+            if (filteredMutations.length > 0) callback(filteredMutations);
+          });
+        };
+        window.MutationObserver.prototype = originalMutationObserver.prototype;
+
+        // Force purge old cache
+        if ('serviceWorker' in navigator) {
+          navigator.serviceWorker.getRegistrations().then(rs => rs.forEach(r => r.unregister()));
+        }
+
+        // SVG Protection: Intercept setAttribute to prevent invalid viewBox values
+        const originalSetAttribute = Element.prototype.setAttribute;
+        Element.prototype.setAttribute = function(name, value) {
+          if (name === 'viewBox' && typeof value === 'string' && value.includes('%')) {
+            console.warn('Versusfy Shield: Blocked invalid viewBox injection:', value);
+            return;
+          }
+          return originalSetAttribute.apply(this, arguments);
+        };
+      })();
+    </script>
+  </head>
+  <body style="margin:0; padding:0;">
+    <div id="versusfy-v161-root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,92 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: comparisons
+    // Document ID: base64(productA_productB_location)
+    // Fields:
+    //   - text: string (required, < 1000000)
+    //   - groundingChunks: list (optional, < 100)
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isValidComparison(data) {
+      return data.keys().hasAll(['text']) &&
+             data.keys().hasOnly(['text', 'groundingChunks']) &&
+             data.text is string && data.text.size() < 1000000 &&
+             (!('groundingChunks' in data) || (data.groundingChunks is list && data.groundingChunks.size() < 100));
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+    match /comparisons/{comparisonId} {
+      allow read: if true;
+      allow create, update: if isValidComparison(request.resource.data);
+      allow delete: if false;
+    }
+
+    match /marketing_phrases/{phraseId} {
+      allow read: if true;
+      allow update: if request.resource.data.diff(resource.data).affectedKeys().hasOnly(['clicks']) &&
+                     request.resource.data.clicks == resource.data.clicks + 1;
+      allow create: if true;
+      allow delete: if false;
+    }
+
+    match /visitors/{visitorId} {
+      allow read: if true;
+      allow create: if true;
+      allow update: if true;
+      allow delete: if false;
+    }
+
+    match /testimonials/{testimonialId} {
+      allow read: if true;
+      allow create: if true;
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    match /price_alerts/{alertId} {
+      // Only allow reading if we can verify ownership (requires Auth)
+      // For now, allow creation for anyone, but keep reading restricted
+      allow read: if isAuthenticated() && (request.auth.token.email == resource.data.email);
+      allow create: if true; 
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    match /coupons/{couponId} {
+      allow read: if true;
+      allow create: if true;
+      allow update: if false;
+      allow delete: if false;
+    }
+
+    match /shopping_desires/{desireId} {
+      allow read: if isAuthenticated() && request.auth.uid == resource.data.userId;
+      allow create: if isAuthenticated() && request.auth.uid == request.resource.data.userId;
+      allow update: if isAuthenticated() && request.auth.uid == resource.data.userId;
+      allow delete: if isAuthenticated() && request.auth.uid == resource.data.userId;
+    }
+
+    match /personal_buyer_alerts/{alertId} {
+      allow read: if isAuthenticated() && request.auth.uid == resource.data.userId;
+      allow create: if false; // Only server/admin should create alerts in a real app, but for simulation we might allow it
+      allow update: if isAuthenticated() && request.auth.uid == resource.data.userId && 
+                     request.resource.data.diff(resource.data).affectedKeys().hasOnly(['read']);
+      allow delete: if isAuthenticated() && request.auth.uid == resource.data.userId;
+    }
+  }
+}
