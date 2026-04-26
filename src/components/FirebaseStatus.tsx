@@ -42,8 +42,14 @@ export const FirebaseStatus: React.FC = () => {
             setDetails(`Database "${runtimeConfig.databaseId || '(default)'}" not found. Verify your Railway VITE_FIREBASE_DATABASE_ID.`);
           }
         } else if (e.message.includes('permissions')) {
-          setStatus('connected'); // Rules exist but we checked a restricted path, which is fine
+          setStatus('connected');
           setDetails('Firebase active. Permissions enforced.');
+        } else if (e.message.includes('offline') || e.message.includes('unavailable')) {
+          setStatus('error');
+          const hasApiKey = runtimeConfig.apiKey && runtimeConfig.apiKey.length > 20;
+          setDetails(hasApiKey 
+            ? `Connection Error: Client reported "offline". Verify VITE_FIREBASE_PROJECT_ID (${runtimeConfig.projectId}) matches your API Key.` 
+            : "Connection Error: API Key missing or invalid. Check Railway Variables.");
         } else {
           setStatus('error');
           setDetails(`Connection Error: ${e.message.slice(0, 80)}...`);

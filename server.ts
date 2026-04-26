@@ -1,4 +1,4 @@
-// Versusfy Server - v1.8.0 (Marketing Release)
+// Versusfy Server - v2.2.0-OMNI (Tactical Release)
 import express from "express";
 import { createServer as createViteServer } from "vite";
 import path from "path";
@@ -206,7 +206,7 @@ async function startServer() {
       geminiApiKey: process.env.GEMINI_API_KEY ? 'HIDDEN_PRESENT' : 'MISSING',
       gmailStatus: (process.env.GMAIL_USER || process.env.SMTP_USER) ? 'READY' : 'MISSING',
       detectedKeys: Object.keys(process.env).filter(k => k.includes('FIREBASE') || k.includes('GMAIL') || k.includes('SMTP')),
-      serverVersion: "2.4.0-OMNI",
+      serverVersion: "2.2.0-OMNI",
       environment: process.env.NODE_ENV || 'development'
     };
 
@@ -252,7 +252,7 @@ async function startServer() {
     console.log(`Versusfy Server v2.2.0-OMNI running on http://localhost:${PORT}`);
     
     // Tactical Environment Check
-    const check = (key: string) => process.env[key] ? '✅ PRESENT' : '❌ MISSING';
+    const check = (key: string) => (process.env[key] || process.env[`VITE_${key}`]) ? '✅ PRESENT' : '❌ MISSING';
     console.log("--- Railway Variables Check ---");
     console.log(`GEMINI_API_KEY: ${check('GEMINI_API_KEY')}`);
     console.log(`FIREBASE_PROJECT_ID: ${check('FIREBASE_PROJECT_ID')}`);
