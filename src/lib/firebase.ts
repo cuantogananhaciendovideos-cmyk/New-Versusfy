@@ -48,19 +48,15 @@ try {
     // Most users should use '(default)'.
     let effectiveDbId: string | undefined = undefined;
     
-    if (databaseId && databaseId !== 'default' && databaseId !== '(default)') {
-      // If databaseId is exactly the same as projectId, it's suspicious in 99% of Firebase projects.
-      if (databaseId === projectId) {
-        console.warn(`⚠️ Versusfy: Database ID matches Project ID. Falling back to (default) for stability.`);
-        effectiveDbId = undefined;
-      } else {
-        effectiveDbId = databaseId;
-      }
+    if (databaseId && databaseId !== '(default)') {
+      // If databaseId is exactly the same as projectId, it's suspicious but we'll try it
+      // unless it's clearly a placeholder.
+      effectiveDbId = databaseId;
     }
 
     if (effectiveDbId) {
       db = getFirestore(app, effectiveDbId);
-      console.log(`✅ Firebase: Connected to tactical database: ${effectiveDbId}`);
+      console.log(`✅ Firebase: Connected to database ID: ${effectiveDbId}`);
     } else {
       db = getFirestore(app);
       console.log(`✅ Firebase: Using (default) database.`);
