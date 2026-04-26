@@ -114,7 +114,7 @@ function handleFirestoreError(error: unknown, operationType: OperationType, path
 }
 
 export const compareProducts = async (productA: string, productB: string, location?: { lat: number; lng: number }, category: string = 'standard') => {
-  const cacheKey = btoa(`${productA}_${productB}_${category}_${location ? JSON.stringify(location) : 'noloc'}`).replace(/=/g, '');
+  const cacheKey = btoa(unescape(encodeURIComponent(`${productA}_${productB}_${category}_${location ? JSON.stringify(location) : 'noloc'}`))).replace(/=/g, '');
   
   if (db && (typeof db.collection === 'function' || db.type)) {
     const docRef = doc(db, "comparisons", cacheKey);
@@ -152,7 +152,7 @@ export const compareProducts = async (productA: string, productB: string, locati
   
   try {
     const text = await generateSmartContent({
-      model: "gemini-flash-latest",
+      model: "gemini-1.5-flash",
       contents: prompt,
       systemInstruction: `You are the Versusfy Supreme Engine. You are a world-class expert in comparing ANYTHING.
       Analyze technical data, user sentiment, stats, and global trends.
@@ -173,7 +173,8 @@ export const compareProducts = async (productA: string, productB: string, locati
       }`
     });
     
-    const result = JSON.parse(text || '{}');
+    const cleanText = (text || '{}').replace(/^```json\n?/, '').replace(/\n?```$/, '').trim();
+    const result = JSON.parse(cleanText);
 
     if (db && (typeof db.collection === 'function' || db.type)) {
       try {
@@ -198,12 +199,13 @@ export const compareProducts = async (productA: string, productB: string, locati
 export const getSimilarProducts = async (product: string) => {
   try {
     const text = await generateSmartContent({
-      model: "gemini-flash-latest",
+      model: "gemini-1.5-flash",
       contents: `List 10 similar products to ${product} sorted from A to Z.`,
       systemInstruction: "You are a specialized product comparison assistant. Return ONLY a JSON array of 10 similar product names sorted A-Z."
     });
     
-    return JSON.parse(text || '[]');
+    const cleanText = (text || '[]').replace(/^```json\n?/, '').replace(/\n?```$/, '').trim();
+    return JSON.parse(cleanText);
   } catch (error) {
     console.error("Error in getSimilarProducts:", error);
     return [];
@@ -213,12 +215,13 @@ export const getSimilarProducts = async (product: string) => {
 export const getEventSuggestions = async (event: string) => {
   try {
     const text = await generateSmartContent({
-      model: "gemini-flash-latest",
+      model: "gemini-1.5-flash",
       contents: `User event/request: ${event}. Provide 5 product suggestions.`,
       systemInstruction: "You are a shopping expert specialized in events and products. Respond as a JSON array of items."
     });
     
-    return JSON.parse(text || '[]');
+    const cleanText = (text || '[]').replace(/^```json\n?/, '').replace(/\n?```$/, '').trim();
+    return JSON.parse(cleanText);
   } catch (error) {
     console.error("Error in getEventSuggestions:", error);
     return [];
@@ -228,12 +231,13 @@ export const getEventSuggestions = async (event: string) => {
 export const identifyProduct = async (base64Content: string, mimeType: string) => {
   try {
     const text = await generateSmartContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-1.5-flash",
       contents: [{ parts: [{ text: "Identify the product" }, { inlineData: { data: base64Content, mimeType } }] }],
       systemInstruction: "Identify model/brand and return JSON: { \"productName\": \"...\" }"
     });
 
-    const result = JSON.parse(text || '{}');
+    const cleanText = (text || '{}').replace(/^```json\n?/, '').replace(/\n?```$/, '').trim();
+    const result = JSON.parse(cleanText);
     return result.productName || null;
   } catch (error) {
     console.error("Error identifying product:", error);
@@ -244,12 +248,13 @@ export const identifyProduct = async (base64Content: string, mimeType: string) =
 export const analyzePersonalStyle = async (base64Content: string, mimeType: string) => {
   try {
     const text = await generateSmartContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-1.5-flash",
       contents: [{ parts: [{ text: "Analyze person in image" }, { inlineData: { data: base64Content, mimeType } }] }],
       systemInstruction: "You are the Supreme Stylist. Analyze features and return style JSON object."
     });
 
-    return JSON.parse(text || '{}');
+    const cleanText = (text || '{}').replace(/^```json\n?/, '').replace(/\n?```$/, '').trim();
+    return JSON.parse(cleanText);
   } catch (error) {
     console.error("Error in analyzePersonalStyle:", error);
     return null;
@@ -259,12 +264,13 @@ export const analyzePersonalStyle = async (base64Content: string, mimeType: stri
 export const analyzeSpaceContext = async (base64Content: string, mimeType: string, budget?: string) => {
   try {
     const text = await generateSmartContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-1.5-flash",
       contents: [{ parts: [{ text: `Analyze space. Budget: ${budget}` }, { inlineData: { data: base64Content, mimeType } }] }],
       systemInstruction: "You are the Space Architect. Analyze decoration and return JSON."
     });
 
-    return JSON.parse(text || '{}');
+    const cleanText = (text || '{}').replace(/^```json\n?/, '').replace(/\n?```$/, '').trim();
+    return JSON.parse(cleanText);
   } catch (error) {
     console.error("Error in analyzeSpaceContext:", error);
     return null;
@@ -274,12 +280,13 @@ export const analyzeSpaceContext = async (base64Content: string, mimeType: strin
 export const analyzeGardeningContext = async (base64Content: string, mimeType: string) => {
   try {
     const text = await generateSmartContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-1.5-flash",
       contents: [{ parts: [{ text: "Analyze terrain" }, { inlineData: { data: base64Content, mimeType } }] }],
       systemInstruction: "You are the Gardening Expert. Analyze terrain/soil and return JSON."
     });
 
-    return JSON.parse(text || '{}');
+    const cleanText = (text || '{}').replace(/^```json\n?/, '').replace(/\n?```$/, '').trim();
+    return JSON.parse(cleanText);
   } catch (error) {
     console.error("Error in analyzeGardeningContext:", error);
     return null;
@@ -289,12 +296,13 @@ export const analyzeGardeningContext = async (base64Content: string, mimeType: s
 export const analyzeMechanicContext = async (base64Content: string, mimeType: string) => {
   try {
     const text = await generateSmartContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-1.5-flash",
       contents: [{ parts: [{ text: "Analyze vehicle issue" }, { inlineData: { data: base64Content, mimeType } }] }],
       systemInstruction: "You are the Mechanical Expert. Diagnose issue and return JSON."
     });
 
-    return JSON.parse(text || '{}');
+    const cleanText = (text || '{}').replace(/^```json\n?/, '').replace(/\n?```$/, '').trim();
+    return JSON.parse(cleanText);
   } catch (error) {
     console.error("Error in analyzeMechanicContext:", error);
     return null;
@@ -304,12 +312,13 @@ export const analyzeMechanicContext = async (base64Content: string, mimeType: st
 export const analyzeBuilderContext = async (base64Content: string, mimeType: string) => {
   try {
     const text = await generateSmartContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-1.5-flash",
       contents: [{ parts: [{ text: "Analyze construction" }, { inlineData: { data: base64Content, mimeType } }] }],
       systemInstruction: "You are the Master Builder. Analyze structural phase and return JSON."
     });
 
-    return JSON.parse(text || '{}');
+    const cleanText = (text || '{}').replace(/^```json\n?/, '').replace(/\n?```$/, '').trim();
+    return JSON.parse(cleanText);
   } catch (error) {
     console.error("Error in analyzeBuilderContext:", error);
     return null;
@@ -319,12 +328,13 @@ export const analyzeBuilderContext = async (base64Content: string, mimeType: str
 export const analyzeOfficeContext = async (base64Content: string, mimeType: string) => {
   try {
     const text = await generateSmartContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-1.5-flash",
       contents: [{ parts: [{ text: "Analyze office setup" }, { inlineData: { data: base64Content, mimeType } }] }],
       systemInstruction: "You are the Productivity Architect. Suggest improvements and return JSON."
     });
 
-    return JSON.parse(text || '{}');
+    const cleanText = (text || '{}').replace(/^```json\n?/, '').replace(/\n?```$/, '').trim();
+    return JSON.parse(cleanText);
   } catch (error) {
     console.error("Error in analyzeOfficeContext:", error);
     return null;
@@ -334,12 +344,13 @@ export const analyzeOfficeContext = async (base64Content: string, mimeType: stri
 export const analyzeRecipeBudget = async (recipe: string, ingredients: string, budget: string) => {
   try {
     const text = await generateSmartContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-1.5-flash",
       contents: `Recipe: ${recipe}, Ingredients: ${ingredients}, Budget: ${budget}`,
       systemInstruction: "You are the Budget Consultant. Analyze feasibility at Walmart USA and return JSON."
     });
 
-    return JSON.parse(text || '{}');
+    const cleanText = (text || '{}').replace(/^```json\n?/, '').replace(/\n?```$/, '').trim();
+    return JSON.parse(cleanText);
   } catch (error) {
     console.error("Error in analyzeRecipeBudget:", error);
     return null;
@@ -349,12 +360,13 @@ export const analyzeRecipeBudget = async (recipe: string, ingredients: string, b
 export const chatWithOmniAssistant = async (query: string) => {
   try {
     const text = await generateSmartContent({
-      model: "gemini-3-flash-preview",
+      model: "gemini-1.5-flash",
       contents: `User Query: ${query}`,
       systemInstruction: "You are the Versusfy Supreme Omni-Assistant. You represent the Pulsating Sphere of Intelligence. Personality: Sweet, Soft, and Tactical. Return ONLY JSON structure: { \"response\": \"...\", \"action\": \"none|compare\", \"suggestions\": [] }"
     });
 
-    return JSON.parse(text || '{}');
+    const cleanText = (text || '{}').replace(/^```json\n?/, '').replace(/\n?```$/, '').trim();
+    return JSON.parse(cleanText);
   } catch (error) {
     console.error("Error in chatWithOmniAssistant:", error);
     return { response: "Encountered a tactical error, dear.", action: "none", suggestions: [] };
