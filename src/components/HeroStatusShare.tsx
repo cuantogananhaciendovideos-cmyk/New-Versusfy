@@ -88,7 +88,7 @@ export const HeroStatusShare: React.FC<HeroStatusShareProps> = ({ productA, prod
           <X className="w-6 h-6 text-white" />
         </button>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2">
+        <div className="grid grid-cols-1 lg:grid-cols-2 max-h-[90vh] lg:max-h-none overflow-y-auto lg:overflow-visible">
           {/* Controls Side */}
           <div className="p-8 lg:p-12 space-y-8">
             <div>
@@ -169,10 +169,10 @@ export const HeroStatusShare: React.FC<HeroStatusShareProps> = ({ productA, prod
           </div>
 
           {/* Ticket Preview Side */}
-          <div className="p-8 lg:p-12 bg-black flex items-center justify-center border-l border-white/5">
+          <div className="p-4 sm:p-8 lg:p-12 bg-black flex items-center justify-center border-l border-white/5">
             <div 
               ref={ticketRef}
-              className="w-full max-w-[320px] aspect-[1/1.6] bg-gradient-to-tr from-[#8B6B23] via-[#D4AF37] to-[#8B6B23] p-[2px] rounded-2xl shadow-2xl overflow-hidden"
+              className="w-full max-w-[280px] sm:max-w-[320px] aspect-[1/1.6] bg-gradient-to-tr from-[#8B6B23] via-[#D4AF37] to-[#8B6B23] p-[2px] rounded-2xl shadow-2xl overflow-hidden"
             >
               <div className="w-full h-full bg-neutral-950 rounded-2xl p-6 flex flex-col items-center justify-between relative overflow-hidden">
                 {/* Background Textures/Gradients */}

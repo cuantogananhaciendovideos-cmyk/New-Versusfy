@@ -340,14 +340,14 @@ const ComparisonResultView = ({
         {/* Left Column: Specs & Sources */}
         <div className="lg:col-span-2 p-8 border-r border-neutral-100 dark:border-neutral-800">
           <h3 className="text-[10px] uppercase tracking-[0.3em] font-black text-neutral-400 mb-6 text-center">Technical Specifications Comparison</h3>
-          <div className="space-y-2 mb-12">
-            {comparison.table?.map((row: any, i: number) => (
-              <div key={i} className="grid grid-cols-3 items-center py-4 border-b border-neutral-100 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-800/20 transition px-4 rounded-xl">
-                <div className="text-sm font-bold text-neutral-900 dark:text-white pr-4">{row.valueA}</div>
-                <div className="text-[10px] uppercase font-black text-neutral-400 text-center bg-neutral-100 dark:bg-neutral-800 py-1 rounded-md">{row.feature}</div>
-                <div className="text-sm font-bold text-neutral-900 dark:text-white pl-4 text-right">{row.valueB}</div>
-              </div>
-            ))}
+            <div className="space-y-3 mb-12 px-0 md:px-4">
+              {comparison.table?.map((row: any, i: number) => (
+                <div key={i} className="flex flex-col md:grid md:grid-cols-3 items-center py-6 md:py-4 border-b border-neutral-100 dark:border-neutral-800 hover:bg-neutral-50 dark:hover:bg-neutral-800/20 transition rounded-xl gap-2 md:gap-0">
+                  <div className="text-sm md:text-sm font-bold text-neutral-900 dark:text-white w-full text-center md:text-left order-2 md:order-1">{row.valueA}</div>
+                  <div className="text-[9px] md:text-[10px] uppercase font-black text-emerald-green md:text-neutral-400 text-center bg-emerald-green/10 md:bg-neutral-100 dark:md:bg-neutral-800 py-1.5 md:py-1 px-3 rounded-full md:rounded-md order-1 md:order-2 w-fit md:w-auto mx-auto">{row.feature}</div>
+                  <div className="text-sm md:text-sm font-bold text-neutral-900 dark:text-white w-full text-center md:text-right order-3 md:order-3">{row.valueB}</div>
+                </div>
+              ))}
             {!comparison.table && (
               <div className="text-neutral-600 dark:text-neutral-300 whitespace-pre-wrap">{comparison.text}</div>
             )}
@@ -579,13 +579,13 @@ const ComparisonResultView = ({
           
           <button 
             onClick={() => setShowHeroModal(true)}
-            className="group relative px-8 py-4 bg-gradient-to-r from-yellow-600 via-yellow-400 to-yellow-600 bg-[length:200%_auto] animate-shimmer rounded-2xl overflow-hidden shadow-[0_0_40px_rgba(202,138,4,0.3)] hover:scale-105 active:scale-95 transition-all"
+            className="group relative w-[calc(100%-2rem)] max-w-sm sm:w-auto px-6 sm:px-8 py-4 bg-gradient-to-r from-yellow-600 via-yellow-400 to-yellow-600 bg-[length:200%_auto] animate-shimmer rounded-2xl overflow-hidden shadow-[0_0_40px_rgba(202,138,4,0.3)] hover:scale-105 active:scale-95 transition-all mx-4"
           >
             <div className="absolute inset-x-0 bottom-0 h-1 bg-black/20" />
-            <div className="relative flex items-center gap-3 text-black font-black uppercase tracking-widest text-sm">
-              <Sparkles className="w-5 h-5 animate-pulse" />
-              Claim Hero Status & Share
-              <Share2 className="w-4 h-4" />
+            <div className="relative flex items-center justify-center gap-2 sm:gap-3 text-black font-black uppercase tracking-tighter sm:tracking-widest text-[10px] sm:text-sm">
+              <Sparkles className="w-4 h-4 sm:w-5 sm:h-5 animate-pulse" />
+              <span className="truncate">Claim Hero Status & Share</span>
+              <Share2 className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </div>
           </button>
         </div>
@@ -2201,14 +2201,14 @@ const ComparisonResultView = ({
         );
       case 'musical':
         return (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-4xl mx-auto space-y-12 mb-20 px-4">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-4xl mx-auto space-y-8 md:space-y-12 mb-20 px-4">
             <div className="text-center space-y-4">
               <div className="inline-flex items-center gap-3 bg-amber-500/10 text-amber-500 px-6 py-2 rounded-full border border-amber-500/20">
                 <Music size={20} />
                 <span className="text-xs font-black uppercase tracking-[0.2em]">Musical Scout Active</span>
               </div>
-              <h2 className="text-5xl font-black text-neutral-900 dark:text-white uppercase tracking-tighter italic">Tactical Music Gear</h2>
-              <p className="text-neutral-500 font-medium text-lg">Compare Guitars, Amps, and Studio Gear across Guitar Center, Sweetwater, Amazon and more.</p>
+              <h2 className="text-3xl md:text-5xl font-black text-neutral-900 dark:text-white uppercase tracking-tighter italic leading-none">Tactical Music Gear</h2>
+              <p className="text-neutral-500 font-medium text-base md:text-lg">Compare Guitars, Amps, and Studio Gear across Guitar Center, Sweetwater, Amazon and more.</p>
             </div>
 
             <div className="flex flex-col items-center gap-8">
@@ -2244,57 +2244,14 @@ const ComparisonResultView = ({
         );
       case 'electrician':
         return (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-4xl mx-auto space-y-12 mb-20 px-4">
+          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-4xl mx-auto space-y-8 md:space-y-12 mb-20 px-4">
             <div className="text-center space-y-4">
               <div className="inline-flex items-center gap-3 bg-yellow-400/10 text-yellow-400 px-6 py-2 rounded-full border border-yellow-400/20">
                 <Zap size={20} />
                 <span className="text-xs font-black uppercase tracking-[0.2em]">Electrician Scout Active</span>
               </div>
-              <h2 className="text-5xl font-black text-neutral-900 dark:text-white uppercase tracking-tighter italic">Energy Saving Intelligence</h2>
-              <p className="text-neutral-500 font-medium text-lg">Analyze your appliances' energy consumption and find more efficient alternatives to save on your electricity bill.</p>
-            </div>
-
-            <div className="flex flex-col items-center gap-8">
-              <button 
-                onClick={() => setIsVisualSearchOpen(true)}
-                className="group relative px-12 py-6 bg-yellow-400 text-black font-black rounded-3xl text-xl uppercase tracking-tighter shadow-2xl shadow-yellow-400/20 flex items-center gap-4 hover:bg-yellow-500 transition-all active:scale-95"
-              >
-                <Camera size={28} />
-                <span>Analyze Appliance (Camera/Image)</span>
-                <div className="absolute inset-0 rounded-3xl border-2 border-yellow-400/50 opacity-0 group-hover:opacity-100 group-hover:scale-110 transition-all" />
-              </button>
-
-              <div className="w-full max-w-lg">
-                <div className="relative group">
-                  <input 
-                    type="text"
-                    placeholder="Enter appliance model or description (e.g., '10-year-old Samsung fridge')..."
-                    value={productB}
-                    onChange={(e) => setProductB(e.target.value)}
-                    className="w-full bg-white dark:bg-neutral-900 border-2 border-dashed border-yellow-400/20 p-6 rounded-3xl outline-none focus:border-yellow-500 transition-all text-neutral-900 dark:text-white font-bold pr-16"
-                  />
-                  <button 
-                     onClick={startListening}
-                     className={`absolute right-4 top-1/2 -translate-y-1/2 p-3 rounded-2xl transition ${isListening ? 'bg-red-500 text-white animate-pulse' : 'bg-yellow-400 text-black hover:bg-yellow-500 shadow-lg shadow-yellow-400/10'}`}
-                  >
-                    <Mic size={20} />
-                  </button>
-                </div>
-                <p className="text-center text-[10px] text-neutral-500 uppercase font-bold tracking-widest mt-2">Tactical Energy Analysis Active</p>
-              </div>
-            </div>
-          </motion.div>
-        );
-      case 'electrician':
-        return (
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="w-full max-w-4xl mx-auto space-y-12 mb-20 px-4">
-            <div className="text-center space-y-4">
-              <div className="inline-flex items-center gap-3 bg-yellow-400/10 text-yellow-400 px-6 py-2 rounded-full border border-yellow-400/20">
-                <Zap size={20} />
-                <span className="text-xs font-black uppercase tracking-[0.2em]">Electrician Scout Active</span>
-              </div>
-              <h2 className="text-5xl font-black text-neutral-900 dark:text-white uppercase tracking-tighter italic">Energy Saving Intelligence</h2>
-              <p className="text-neutral-500 font-medium text-lg">Analyze your appliances' energy consumption and find more efficient alternatives to save on your electricity bill.</p>
+              <h2 className="text-3xl md:text-5xl font-black text-neutral-900 dark:text-white uppercase tracking-tighter italic leading-none">Energy Saving Intelligence</h2>
+              <p className="text-neutral-500 font-medium text-base md:text-lg">Analyze your appliances' energy consumption and find more efficient alternatives to save on your electricity bill.</p>
             </div>
 
             <div className="flex flex-col items-center gap-8">
@@ -2367,7 +2324,7 @@ const ComparisonResultView = ({
               </motion.div>
             )}
 
-            <div className="flex flex-wrap justify-center gap-3 mb-8 w-full max-w-4xl">
+            <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-8 w-full max-w-4xl px-2">
               {[
                 { id: 'standard', label: 'Products', icon: ShoppingBag, color: 'bg-emerald-green' },
                 { id: 'prompts', label: 'AI Prompts', icon: Wand2, color: 'bg-purple-600' },
@@ -2385,9 +2342,9 @@ const ComparisonResultView = ({
                 <button 
                   key={cat.id}
                   onClick={() => setComparisonCategory(cat.id as any)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold text-xs transition border ${comparisonCategory === cat.id ? `${cat.color} text-white border-transparent shadow-lg shadow-black/10` : 'bg-white dark:bg-neutral-900 text-neutral-500 border-neutral-200 dark:border-neutral-800 hover:border-neutral-400'}`}
+                  className={`flex items-center gap-1.5 md:gap-2 px-3 md:px-4 py-2 rounded-xl font-bold text-[10px] md:text-xs transition border ${comparisonCategory === cat.id ? `${cat.color} text-white border-transparent shadow-lg shadow-black/10` : 'bg-white dark:bg-neutral-900 text-neutral-500 border-neutral-200 dark:border-neutral-800 hover:border-neutral-400'}`}
                 >
-                  <cat.icon size={14} /> {cat.label}
+                  <cat.icon size={13} /> {cat.label}
                 </button>
               ))}
             </div>
@@ -2425,7 +2382,7 @@ const ComparisonResultView = ({
                      comparisonCategory === 'pharmacy' ? 'Medication A' : 
                      comparisonCategory === 'academic' ? 'Topic A' : 'Restaurant A'}
                   </label>
-                  <div className="flex gap-2">
+                  <div className="flex flex-col md:flex-row gap-2">
                     {comparisonCategory === 'prompts' ? (
                       <textarea
                         placeholder="Paste first prompt here..."
@@ -2446,10 +2403,10 @@ const ComparisonResultView = ({
                       <button
                         onClick={handleFindSimilar}
                         disabled={loadingSimilar || !productA}
-                        className="bg-emerald-green hover:bg-emerald-600 text-white px-6 py-4 rounded-lg transition shadow-lg shadow-emerald-green/20 flex items-center gap-2 font-bold whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed h-fit mt-auto"
+                        className="bg-emerald-green hover:bg-emerald-600 text-white px-6 py-4 rounded-lg transition shadow-lg shadow-emerald-green/20 flex items-center justify-center gap-2 font-bold whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed h-full md:h-auto"
                       >
                         {loadingSimilar ? <Loader2 className="animate-spin size-5" /> : <Search size={20} />}
-                        <span>Suggestions</span>
+                        <span className="md:hidden lg:inline text-sm">Suggestions</span>
                       </button>
                     )}
                   </div>
@@ -2489,7 +2446,7 @@ const ComparisonResultView = ({
                   <div className="flex justify-center items-center gap-2 mb-1">
                     <label className="text-[10px] uppercase tracking-widest text-emerald-green font-bold text-center italic">Tactical Discovery Tools</label>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex flex-col md:flex-row gap-2">
                     {comparisonCategory === 'prompts' ? (
                       <textarea
                         placeholder="Paste second prompt here..."
@@ -2512,17 +2469,17 @@ const ComparisonResultView = ({
                         className="flex-grow bg-white dark:bg-neutral-900 p-4 rounded-lg border border-neutral-200 dark:border-neutral-700 focus:border-emerald-green outline-none transition text-neutral-900 dark:text-white"
                       />
                     )}
-                    <div className="flex gap-1 items-start">
+                    <div className="flex gap-2 w-full md:w-auto">
                       <button
                         onClick={startListening}
-                        className={`p-4 rounded-lg transition shadow-lg ${isListening ? 'bg-red-500 text-white shadow-red-500/20' : 'bg-neutral-200 dark:bg-neutral-800 text-neutral-900 dark:text-white hover:bg-neutral-300 dark:hover:bg-neutral-700'}`}
+                        className={`flex-1 md:flex-none p-4 rounded-lg transition shadow-lg flex items-center justify-center ${isListening ? 'bg-red-500 text-white shadow-red-500/20' : 'bg-neutral-200 dark:bg-neutral-800 text-neutral-900 dark:text-white hover:bg-neutral-300 dark:hover:bg-neutral-700'}`}
                         title="Voice Entry"
                       >
                         <Mic size={20} />
                       </button>
                       <button
                         onClick={() => setIsVisualSearchOpen(true)}
-                        className="p-4 rounded-lg bg-emerald-green text-white hover:bg-emerald-600 transition shadow-lg shadow-emerald-500/20"
+                        className="flex-1 md:flex-none p-4 rounded-lg bg-emerald-green text-white hover:bg-emerald-600 transition shadow-lg shadow-emerald-500/20 flex items-center justify-center"
                         title="Visual Intelligence"
                       >
                         <Camera size={20} />
@@ -2621,7 +2578,7 @@ const ComparisonResultView = ({
   };
 
   return (
-    <div className="min-h-screen p-6 md:p-12 flex flex-col items-center relative overflow-x-hidden">
+    <div className="min-h-screen p-4 md:p-12 flex flex-col items-center relative overflow-x-hidden">
       <AnimatePresence>
         {currentSubliminal && (
           <div
@@ -2711,20 +2668,20 @@ const ComparisonResultView = ({
             <RotateCcw size={20} />
           </button>
         </div>
-        <h1 className="text-4xl font-bold tracking-tighter text-emerald-green relative">
-          <img src="https://i.imgur.com/Oyl75Xx.png" alt="Versusfy Logo" className="h-40 w-auto" referrerPolicy="no-referrer" />
+        <h1 className="text-2xl md:text-4xl font-bold tracking-tighter text-emerald-green relative">
+          <img src="https://i.imgur.com/Oyl75Xx.png" alt="Versusfy Logo" className="h-24 md:h-40 w-auto" referrerPolicy="no-referrer" />
           <div className="absolute -top-4 -right-12 bg-apple-red text-white text-[8px] font-black px-2 py-0.5 rounded-full rotate-12 shadow-lg border-2 border-white dark:border-neutral-950">
             SUPREME ELITE
           </div>
         </h1>
         <p className="text-neutral-600 dark:text-neutral-400">Pick Your Winner!</p>
         <div className="flex flex-col items-center gap-4 mt-2">
-          <div className="flex gap-4">
-            <span className={`flex items-center gap-1 text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded transition-colors ${comparison ? 'bg-blue-500/20 text-blue-500' : 'bg-neutral-200 dark:bg-neutral-800 text-neutral-500'}`}>
-              <TrendingDown size={12} /> {comparison ? 'Price Tracking Active' : 'Price Tracking Ready'}
+          <div className="flex flex-wrap justify-center gap-3 md:gap-4 px-4 text-center">
+            <span className={`flex items-center gap-1 text-[9px] md:text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded transition-colors ${comparison ? 'bg-blue-500/20 text-blue-500' : 'bg-neutral-200 dark:bg-neutral-800 text-neutral-500'}`}>
+              <TrendingDown size={11} /> {comparison ? 'Price Tracking Active' : 'Price Tracking Ready'}
             </span>
-            <span className={`flex items-center gap-1 text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded transition-colors ${comparison ? 'bg-purple-500/20 text-purple-500' : 'bg-neutral-200 dark:bg-neutral-800 text-neutral-500'}`}>
-              <Ticket size={12} /> {comparison ? 'Coupons Found' : 'Coupon Tracker Ready'}
+            <span className={`flex items-center gap-1 text-[9px] md:text-[10px] uppercase tracking-widest font-bold px-2 py-1 rounded transition-colors ${comparison ? 'bg-purple-500/20 text-purple-500' : 'bg-neutral-200 dark:bg-neutral-800 text-neutral-500'}`}>
+              <Ticket size={11} /> {comparison ? 'Coupons Found' : 'Coupon Tracker Ready'}
             </span>
           </div>
           {comparison && (
@@ -2783,7 +2740,7 @@ const ComparisonResultView = ({
           </div>
         </div>
 
-        <div className="flex gap-6">
+        <div className="flex flex-wrap gap-x-6 gap-y-3 justify-center px-4">
           <button onClick={() => setView('home')} className="flex items-center gap-1 hover:text-white transition"><Home size={16}/> Home</button>
           <button onClick={() => setView('special-events')} className="flex items-center gap-1 hover:text-white transition"><Sparkles size={16}/> Events AI</button>
           <button onClick={() => setView('about')} className="flex items-center gap-1 hover:text-white transition"><Info size={16}/> About</button>
@@ -2840,16 +2797,16 @@ const ComparisonResultView = ({
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsAssistantOpen(true)}
-        className="fixed bottom-24 right-8 z-40 w-16 h-16 rounded-full shadow-[0_0_30px_rgba(16,185,129,0.3)] transition-all overflow-hidden border-4 border-white flex flex-col"
+        className="fixed bottom-24 right-4 sm:right-8 z-40 w-14 h-14 sm:w-16 sm:h-16 rounded-full shadow-[0_0_30px_rgba(16,185,129,0.3)] transition-all overflow-hidden border-4 border-white flex flex-col"
         title="Activate Omni-Assistant Magic"
       >
         <div className="flex-1 bg-emerald-green" />
-        <div className="h-4 bg-white relative">
-           <div className="absolute inset-0 bg-black/10 m-auto h-2 w-8 rounded-full" />
+        <div className="h-3 sm:h-4 bg-white relative">
+           <div className="absolute inset-0 bg-black/10 m-auto h-1.5 sm:h-2 w-6 sm:w-8 rounded-full" />
         </div>
         <div className="flex-1 bg-apple-red" />
         {isAssistantOpen && (
-          <span className="absolute -top-12 right-0 bg-emerald-green text-white text-[8px] font-black px-2 py-1 rounded-lg animate-bounce whitespace-nowrap">
+          <span className="absolute -top-10 sm:-top-12 right-0 bg-emerald-green text-white text-[7px] sm:text-[8px] font-black px-2 py-1 rounded-lg animate-bounce whitespace-nowrap">
             ASSISTANT ACTIVE
           </span>
         )}
