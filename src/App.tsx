@@ -35,6 +35,7 @@ import { EventSuggestions } from './components/EventSuggestions';
 import { VisualSearch } from './components/VisualSearch';
 import { RecipeBudgetConsultant } from './components/RecipeBudgetConsultant';
 import { OmniAssistant } from './components/OmniAssistant';
+import { HeroStatusShare } from './components/HeroStatusShare';
 import { Camera } from 'lucide-react';
 
 interface ComparisonResult {
@@ -95,6 +96,8 @@ export default function App() {
   const [contactStatus, setContactStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
   const [theme, setTheme] = useState<'light' | 'dark'>('dark');
   const [bannerPhrase, setBannerPhrase] = useState<MarketingPhrase | null>(null);
+  const [detectedCity, setDetectedCity] = useState<string | null>(null);
+  const [heroName, setHeroName] = useState<string | null>(null);
   const [subliminalPhrases, setSubliminalPhrases] = useState<MarketingPhrase[]>([]);
   const [currentSubliminal, setCurrentSubliminal] = useState<MarketingPhrase | null>(null);
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
@@ -106,6 +109,7 @@ export default function App() {
   const [isOmniMode, setIsOmniMode] = useState(false);
   const [isAssistantOpen, setIsAssistantOpen] = useState(false);
   const [footerStats, setFooterStats] = useState({ savings: 0, deals: 0 });
+  const [showHeroShare, setShowHeroShare] = useState(false);
   const confettiCanvasRef = React.useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -216,6 +220,10 @@ const ComparisonResultView = ({
   samAshData
 }: any) => {
   const [showEvolution, setShowEvolution] = useState(false);
+  const [showHeroModal, setShowHeroModal] = useState(false);
+
+  // Calculate a "Hero Savings" figure
+  const heroSavings = comparison.scoreB ? (comparison.scoreB / 2 + 10).toFixed(1) : '34.5';
 
   // Memoize history data so it doesn't flicker on re-renders
   const historyData = React.useMemo(() => {
@@ -558,6 +566,40 @@ const ComparisonResultView = ({
           <CouponTracker productName={productA} />
         </div>
         <ShareTools productA={productA} productB={productB} comparisonText={comparison.summary || comparison.text || ''} />
+        
+        <div className="mt-8 flex flex-col items-center gap-6">
+          <div className="text-center space-y-2">
+            <h4 className="text-xl font-black text-white uppercase tracking-tighter italic flex items-center justify-center gap-2">
+              <Trophy className="text-yellow-500 w-6 h-6" /> Are You a Community Hero?
+            </h4>
+            <p className="text-sm text-neutral-400 max-w-md mx-auto">
+              Share your tactical savings victory and inspire others. Top savers win exclusive rewards and status.
+            </p>
+          </div>
+          
+          <button 
+            onClick={() => setShowHeroModal(true)}
+            className="group relative px-8 py-4 bg-gradient-to-r from-yellow-600 via-yellow-400 to-yellow-600 bg-[length:200%_auto] animate-shimmer rounded-2xl overflow-hidden shadow-[0_0_40px_rgba(202,138,4,0.3)] hover:scale-105 active:scale-95 transition-all"
+          >
+            <div className="absolute inset-x-0 bottom-0 h-1 bg-black/20" />
+            <div className="relative flex items-center gap-3 text-black font-black uppercase tracking-widest text-sm">
+              <Sparkles className="w-5 h-5 animate-pulse" />
+              Claim Hero Status & Share
+              <Share2 className="w-4 h-4" />
+            </div>
+          </button>
+        </div>
+
+        <AnimatePresence>
+          {showHeroModal && (
+            <HeroStatusShare 
+              productA={productA} 
+              productB={productB} 
+              savings={heroSavings}
+              onClose={() => setShowHeroModal(false)} 
+            />
+          )}
+        </AnimatePresence>
       </div>
     </motion.div>
   );
@@ -591,6 +633,9 @@ const ComparisonResultView = ({
 
     // Check for version mismatch
     const runtimeConfig = (window as any).VERSUSFY_RUNTIME_CONFIG || {};
+    
+    if (runtimeConfig.detectedCity) setDetectedCity(runtimeConfig.detectedCity);
+    if (runtimeConfig.heroName) setHeroName(runtimeConfig.heroName);
     
     // SEO: Auto-load from URL
     if (runtimeConfig.autoCompare && !comparison && !loading && !productA) {
@@ -1109,6 +1154,7 @@ const ComparisonResultView = ({
               <li><strong>Analyze:</strong> Review the AI-generated comparison and check specific scores, specs, and the final expert verdict.</li>
               <li><strong>Unlock & Save:</strong> Click the "Unlock Bundle" button to reveal exclusive coupons and GEO-targeted offers.</li>
               <li><strong>Buy & Track:</strong> Purchase through our links to get these deals and activate your <strong>Free Price Alert</strong> for that product.</li>
+              <li><strong>Hero Status:</strong> Click <strong>"Claim Hero Status & Share"</strong> to generate your personalized savings ticket with your photo and name to inspire your community to save.</li>
             </ol>
 
             <h3 className="text-2xl font-semibold mt-8 mb-4 text-emerald-green border-b border-emerald-green/20 pb-2">Mastering Special Events AI Agent</h3>
@@ -1271,8 +1317,39 @@ const ComparisonResultView = ({
               </div>
             </div>
 
+            <h3 className="text-2xl font-semibold mt-8 mb-4 text-emerald-green border-b border-emerald-green/20 pb-2">Mastering Hero Status & Community Rewards</h3>
+            <div className="space-y-6 mb-8">
+              <div className="bg-neutral-50 dark:bg-neutral-800/30 p-6 rounded-2xl border border-neutral-100 dark:border-neutral-800">
+                <h4 className="font-bold text-neutral-900 dark:text-white mb-2 flex items-center gap-2">
+                  <span className="bg-emerald-green text-white w-6 h-6 rounded-full flex items-center justify-center text-[10px]">!</span>
+                  Claim Your Hero Status
+                </h4>
+                <p className="text-sm">After a comparison, click the <strong>"Claim Hero Status & Share"</strong> button. This allows you to generate a professional, minimalist shopping "ticket" flyer that highlights the fortune you've helped save.</p>
+              </div>
+
+              <div className="bg-neutral-50 dark:bg-neutral-800/30 p-6 rounded-2xl border border-neutral-100 dark:border-neutral-800">
+                <h4 className="font-bold text-neutral-900 dark:text-white mb-2 flex items-center gap-2">
+                  <span className="bg-emerald-green text-white w-6 h-6 rounded-full flex items-center justify-center text-[10px]">★</span>
+                  Personalize & Inspire
+                </h4>
+                <p className="text-sm">Upload your photo and enter your name to be featured as a <strong>"Hero Without a Cape."</strong> Share this elegance-focused flyer on your social networks to lead your family and friends towards financial freedom.</p>
+              </div>
+
+              <div className="bg-neutral-50 dark:bg-neutral-800/30 p-6 rounded-2xl border border-neutral-100 dark:border-neutral-800">
+                <h4 className="font-bold text-neutral-900 dark:text-white mb-2 flex items-center gap-2">
+                  <span className="bg-emerald-green text-white w-6 h-6 rounded-full flex items-center justify-center text-[10px]">$</span>
+                  Win Surprise Prizes
+                </h4>
+                <p className="text-sm">Join our global movement of savers. The heroes who inspire the most people to save reach the top of our community tiers and become eligible for <strong>Mega Surprise Rewards</strong> and worldwide recognition.</p>
+              </div>
+            </div>
+
             <h3 className="text-2xl font-semibold mt-6 mb-3 text-neutral-900 dark:text-white">FAQ</h3>
             <div className="space-y-4">
+              <div>
+                <h4 className="font-semibold text-neutral-900 dark:text-white">What is "Hero Status"?</h4>
+                <p>Hero Status is our recognition for users who help others save. By claiming your status, you generate a "Gold Ticket" flyer that you can share with family and friends. It makes you the savior of their wallets and qualifies you for exclusive community prizes.</p>
+              </div>
               <div>
                 <h4 className="font-semibold text-neutral-900 dark:text-white">What is Versusfy?</h4>
                 <p>Versusfy is a minimalist, futuristic product comparison engine designed to help you make informed purchasing decisions quickly and easily.</p>
@@ -2254,6 +2331,42 @@ const ComparisonResultView = ({
       default:
         return (
           <>
+            {detectedCity && (
+              <motion.div 
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="w-full max-w-4xl mb-8 bg-emerald-green/10 border border-emerald-green border-dashed rounded-2xl p-6 text-center shadow-[0_0_50px_rgba(16,185,129,0.1)]"
+              >
+                <div className="flex items-center justify-center gap-3 mb-2">
+                  <MapPin className="text-emerald-green animate-bounce" size={24} />
+                  <h3 className="text-2xl font-black text-neutral-900 dark:text-white uppercase tracking-tighter italic">Localized Intelligence Active</h3>
+                </div>
+                <p className="text-emerald-green font-bold text-lg">Showing the absolute BEST hidden deals in <span className="underline decoration-2 underline-offset-4">{detectedCity}</span> today.</p>
+              </motion.div>
+            )}
+
+            {heroName && (
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="w-full max-w-4xl mb-12 bg-gradient-to-r from-yellow-600/20 via-yellow-400/20 to-yellow-600/20 border-2 border-yellow-400/50 rounded-3xl p-10 text-center relative overflow-hidden"
+              >
+                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/carbon-fibre.png')] opacity-10" />
+                <div className="relative z-10">
+                  <Trophy className="text-yellow-500 w-16 h-16 mx-auto mb-4 animate-pulse" />
+                  <h2 className="text-5xl font-black text-neutral-900 dark:text-white uppercase tracking-tighter italic mb-4 leading-none">
+                    COMMUNITY HERO SPOTLIGHT
+                  </h2>
+                  <p className="text-2xl font-bold text-yellow-500 mb-6">
+                    Saluting <span className="bg-yellow-400 text-black px-4 py-1 rounded inline-block transform -rotate-2">{heroName}</span>
+                  </p>
+                  <p className="max-w-xl mx-auto text-neutral-500 font-medium leading-relaxed">
+                    This hero has saved a fortune for their community using Versusfy. Join the movement and start your tactical comparison today.
+                  </p>
+                </div>
+              </motion.div>
+            )}
+
             <div className="flex flex-wrap justify-center gap-3 mb-8 w-full max-w-4xl">
               {[
                 { id: 'standard', label: 'Products', icon: ShoppingBag, color: 'bg-emerald-green' },

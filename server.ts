@@ -214,11 +214,89 @@ async function startServer() {
     
     return {
       ...firebaseConfig,
+      detectedCity: (() => {
+        const match = req.originalUrl.match(/\/best-deals-in-([a-z-]+)/i);
+        return match ? match[1].split('-').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') : null;
+      })(),
+      heroName: (() => {
+        const match = req.originalUrl.match(/\/hero-status\/([a-z-]+)/i);
+        return match ? match[1].split('-').map((w: string) => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') : null;
+      })(),
       autoCompare: (() => {
         const match = req.originalUrl.match(/\/compare\/(.+)-vs-(.+)/i);
         return match ? { a: match[1].replace(/-/g, ' '), b: match[2].replace(/-/g, ' ') } : null;
       })()
     };
+  };
+
+  // SEO Injection Engine (MEG-SEO AGGRESSIVE SHIELD)
+  const injectSEO = (html: string, url: string) => {
+    let title = "Versusfy | AI Product Comparison, Exclusive Coupons & Price Alerts";
+    let description = "Save a fortune with Versusfy's AI. Compare products, find exclusive coupons, and unlock local deals.";
+    let jsonLd = "";
+
+    // Pattern: /best-deals-in-[city]
+    const dealMatch = url.match(/\/best-deals-in-([a-z-]+)/i);
+    if (dealMatch) {
+      const city = dealMatch[1].split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+      title = `Best Local Product Deals in ${city} | Versusfy AI Savings`;
+      description = `Unlock hidden coupons and exclusive deals in ${city}. Versusfy's AI monitors retailers to save you a fortune in ${city}.`;
+      jsonLd = `
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "LocalBusiness",
+          "name": "Versusfy ${city}",
+          "description": "Premium AI price comparison and coupon hunting for residents of ${city}.",
+          "url": "https://versusfy.com${url}",
+          "areaServed": "${city}",
+          "priceRange": "$",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "${city}",
+            "addressRegion": "USA"
+          }
+        }
+        </script>
+      `;
+    }
+
+    // Pattern: /compare/[p1]-vs-[p2]
+    const compareMatch = url.match(/\/compare\/(.+)-vs-(.+)/i);
+    if (compareMatch) {
+      const p1 = compareMatch[1].replace(/-/g, ' ').toUpperCase();
+      const p2 = compareMatch[2].replace(/-/g, ' ').toUpperCase();
+      title = `${p1} vs ${p2}: Expert AI Verdict & Lowest Price Guaranteed`;
+      description = `Is ${p1} better than ${p2}? See the expert comparison, tactical specs, and get valid coupons for both products.`;
+      jsonLd = `
+        <script type="application/ld+json">
+        {
+          "@context": "https://schema.org",
+          "@type": "ComparisonPage",
+          "mainEntity": {
+            "@type": "Product",
+            "name": "${p1} vs ${p2} Comparison"
+          },
+          "description": "Versusfy tactical AI comparison for ${p1} and ${p2}."
+        }
+        </script>
+      `;
+    }
+
+    // Pattern: /hero-status/[name]
+    const heroMatch = url.match(/\/hero-status\/([a-z-]+)/i);
+    if (heroMatch) {
+      const name = heroMatch[1].replace(/-/g, ' ').toUpperCase();
+      title = `${name}: Community Savings Hero | Versusfy Hall of Fame`;
+      description = `Celebrated Hero ${name} has saved their community a fortune using Versusfy AI. Join the movement and start saving today.`;
+    }
+
+    return html
+      .replace(/<title>.*?<\/title>/, `<title>${title}</title>`)
+      .replace(/<meta name="description" content=".*?" \/>/, `<meta name="description" content="${description}" />`)
+      .replace(/<meta property="og:title" content=".*?" \/>/, `<meta property="og:title" content="${title}" />`)
+      .replace(/<meta property="og:description" content=".*?" \/>/, `<meta property="og:description" content="${description}" />`)
+      .replace('<!-- SEO_INJECTION_POINT -->', jsonLd);
   };
 
   // Vite middleware setup
@@ -227,6 +305,29 @@ async function startServer() {
       server: { middlewareMode: true },
       appType: "spa",
     });
+    
+    // Inject SEO and config into dev server
+    app.use(async (req, res, next) => {
+      if (req.url === '/' || req.url.startsWith('/compare/') || req.url.startsWith('/best-deals-in-') || req.url.startsWith('/hero-status/')) {
+        try {
+          let html = fs.readFileSync(path.join(process.cwd(), 'index.html'), 'utf-8');
+          html = await vite.transformIndexHtml(req.url, html);
+          
+          const runtimeConfig = getRuntimeConfig(req);
+          html = injectSEO(html, req.url);
+          
+          const configScript = `<script>window.VERSUSFY_RUNTIME_CONFIG = ${JSON.stringify(runtimeConfig)};</script>`;
+          html = html.replace('</head>', `${configScript}</head>`);
+          
+          res.status(200).set({ 'Content-Type': 'text/html' }).end(html);
+          return;
+        } catch (e) {
+          next(e);
+        }
+      }
+      next();
+    });
+
     app.use(vite.middlewares);
   } else {
     const distPath = path.join(process.cwd(), 'dist');
@@ -238,6 +339,10 @@ async function startServer() {
       try {
         let html = fs.readFileSync(indexPath, 'utf-8');
         const runtimeConfig = getRuntimeConfig(req);
+        
+        // Inject SEO Metadata based on URL path
+        html = injectSEO(html, req.url);
+
         const configScript = `<script>window.VERSUSFY_RUNTIME_CONFIG = ${JSON.stringify(runtimeConfig)};</script>`;
         html = html.replace('</head>', `${configScript}</head>`);
         res.setHeader('Content-Type', 'text/html');
