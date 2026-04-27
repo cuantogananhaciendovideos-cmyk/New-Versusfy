@@ -94,7 +94,7 @@ export default function App() {
   const [isIAAgentsOpen, setIsIAAgentsOpen] = useState(false);
   const [contactForm, setContactForm] = useState({ email: '', message: '' });
   const [contactStatus, setContactStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
-  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
   const [bannerPhrase, setBannerPhrase] = useState<MarketingPhrase | null>(null);
   const [detectedCity, setDetectedCity] = useState<string | null>(null);
   const [heroName, setHeroName] = useState<string | null>(null);
@@ -986,6 +986,30 @@ const ComparisonResultView = ({
                 <li><strong>Privacy-First Approach:</strong> We adhere to a "Privacy by Design" philosophy, ensuring your search behavior remains private.</li>
                 <li><strong>Data-Driven Decisions:</strong> We focus on objective specifications and price ranges to help you find the best value.</li>
               </ul>
+              <div className="bg-purple-500/5 p-6 rounded-2xl border border-purple-500/20 mt-8">
+                <h4 className="font-bold text-purple-600 dark:text-purple-400 mb-3 text-lg italic uppercase">Operational Units & Tactical Network</h4>
+                <p className="text-sm mb-4">Our specialized Scouts are strictly integrated with our Tactical Affiliate Network to ensure real-time precision sourcing:</p>
+                <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-2 text-xs font-medium">
+                  <li><span className="text-purple-500">●</span> <strong>Mechanic Scout:</strong> AutoZone, Pep Boys, Advance Auto, O'Reilly, Walmart, Amazon.</li>
+                  <li><span className="text-purple-500">●</span> <strong>Master Builder:</strong> Home Depot, Walmart, Amazon.</li>
+                  <li><span className="text-purple-500">●</span> <strong>Gardening Scout:</strong> Walmart, Amazon, Home Depot.</li>
+                  <li><span className="text-purple-500">●</span> <strong>Office Architect:</strong> Office Depot, Best Buy, Amazon.</li>
+                  <li><span className="text-purple-500">●</span> <strong>Video Game Assistant:</strong> Best Buy, Walmart, eBay.</li>
+                  <li><span className="text-purple-500">●</span> <strong>Toy Scout:</strong> Toys R Us, Walmart, Amazon.</li>
+                  <li><span className="text-purple-500">●</span> <strong>Pharmacy Scout:</strong> Walgreens, CVS, Walmart, Amazon.</li>
+                  <li><span className="text-purple-500">●</span> <strong>Academic Master:</strong> Best Buy, Walmart, Amazon, Office Depot.</li>
+                  <li><span className="text-purple-500">●</span> <strong>Musical Scout:</strong> Guitar Center, Sweetwater, Amazon, eBay.</li>
+                  <li><span className="text-purple-500">●</span> <strong>Electrician Scout:</strong> Best Buy, Home Depot, Walmart, Amazon.</li>
+                </ul>
+              </div>
+              <div className="bg-emerald-green/5 p-6 rounded-2xl border border-emerald-green/20">
+                <h4 className="font-bold text-emerald-green mb-2 uppercase italic">Verified Tactical Partners</h4>
+                <p className="text-sm">All recommendations are EXCLUSIVELY sourced from our verified Affiliate Network (Amazon, Walmart, eBay, Best Buy, Home Depot, and specialized partners). This ensures every item has a valid, trackable deal and coupon support. We may earn a small commission from these links at no extra cost to you, which keeps Versusfy free.</p>
+              </div>
+              <div className="bg-emerald-green/10 p-6 rounded-2xl border border-emerald-green/30">
+                <h4 className="font-bold text-emerald-green mb-2 uppercase italic">Exclusive Community Benefits</h4>
+                <p className="text-sm">Buying through our tactical links unlocks <strong>exclusive, verified coupons</strong> and <strong>GEO-targeted offers</strong>. Additionally, every purchase activates our <strong>Free AI Price Alert</strong> service, ensuring you have the tactical advantage even after your search.</p>
+              </div>
               <p>
                 Whether you are researching the latest tech gadgets, home appliances, or everyday essentials, Versusfy is here to streamline your shopping journey. Join us in redefining how the world compares products.
               </p>
@@ -1399,53 +1423,8 @@ const ComparisonResultView = ({
                 <p>We use advanced AI models to analyze product features, specifications, and pricing data from multiple retailers to provide you with a comprehensive comparison.</p>
               </div>
               <div>
-                <h4 className="font-semibold text-neutral-900 dark:text-white">Can Versusfy help with my cooking budget?</h4>
-                <p>Yes. By using the <strong>Recipe Scout</strong> in the Special Events section, you can enter any recipe and your target budget. The AI will analyze Walmart pricing (USA) to tell you if your budget is enough, providing a price breakdown and tactical tips to save money by picking specific brands or items.</p>
-              </div>
-              <div>
-                <h4 className="font-semibold text-neutral-900 dark:text-white">What is the Space Scout?</h4>
-                <p>The <strong>Space Scout</strong> is your AI Interior Architect and Event Planner. Scan a room to get advice on <strong>paint colors, flooring, and furniture</strong>. Or scan an empty salon to get the best <strong>decoration arrangements for Quince años or Weddings</strong>. It even provides a budget-friendly list of products to help you realize the vision.</p>
-              </div>
-              <div>
-                <h4 className="font-semibold text-neutral-900 dark:text-white">How does the Style Advisor work?</h4>
-                <p>The <strong>Style Advisor</strong> uses AI Vision to analyze your features (skin tone, shape, others) from a selfie. It provides tactical recommendations for <strong>Makeup (Pinturas), clothing (Ropa), Jewelry (Joyería), Footwear (Zapatos)</strong>, and our newest features: <strong>Hair Styles & Accessories (Cabello)</strong> and <strong>Manicure/Pedicure (Uñas de manos y pies)</strong>. It even suggests accessories like hairpins or headbands to complement your specific cut and provides a full list of paintings/polish colors for your nails.</p>
-              </div>
-              <div className="bg-purple-500/5 p-4 rounded-xl border border-purple-500/20">
-                <h4 className="font-bold text-purple-600 dark:text-purple-400 mb-1">What are "Operational Units" in the IA Agents menu?</h4>
-                <p className="text-sm">Found in the <strong>IA Agents</strong> dropdown, these are hyper-specialized scouts strictly integrated with our Tactical Affiliate Network:
-                  <ul className="list-disc list-inside mt-2 space-y-1">
-                    <li><strong>Mechanic Scout:</strong> Auto diagnostics and parts scout EXCLUSIVELY for AutoZone, Pep Boys, Advance Auto, O'Reilly, Walmart, and Amazon.</li>
-                    <li><strong>Master Builder:</strong> Construction site materials EXCLUSIVELY from Home Depot, Walmart, and Amazon.</li>
-                    <li><strong>Gardening Scout:</strong> Plant health and tech EXCLUSIVELY from Walmart, Amazon, and Home Depot.</li>
-                    <li><strong>Office Architect:</strong> Workspace productivity tech EXCLUSIVELY from Office Depot, Best Buy, and Amazon.</li>
-                    <li><strong>Video Game Assistant:</strong> Consoles and games EXCLUSIVELY from Best Buy, Walmart, and eBay.</li>
-                    <li><strong>Toy Scout:</strong> Safe toys EXCLUSIVELY from Toys R Us, Walmart, and Amazon.</li>
-                    <li><strong>Pharmacy Scout:</strong> Real-time drug pricing EXCLUSIVELY across Walgreens, CVS, Walmart and Amazon.</li>
-                    <li><strong>Academic Master:</strong> School supplies and tech EXCLUSIVELY from Best Buy, Walmart, Amazon, and Office Depot.</li>
-                    <li><strong>Musical Scout:</strong> Guitars, amps, and production gear EXCLUSIVELY from Guitar Center, Sweetwater, Amazon, and eBay.</li>
-                    <li><strong>Electrician Scout:</strong> Appliance energy analysis and efficient alternatives from Best Buy, Home Depot, Walmart, and Amazon.</li>
-                  </ul>
-                </p>
-              </div>
-              <div>
-                <h4 className="font-semibold text-neutral-900 dark:text-white">Where do recommendations come from?</h4>
-                <p>Versusfy is a tactical command center. All product recommendations, smart buys, and agent suggestions are EXCLUSIVELY sourced from our verified Affiliate Network (Amazon, Walmart, eBay, Best Buy, Home Depot, and specialized partners) to ensure every item has a valid, trackable deal and coupon support.</p>
-              </div>
-              <div>
-                <h4 className="font-semibold text-neutral-900 dark:text-white">Why do you use affiliate links?</h4>
-                <p>We participate in affiliate programs with retailers like Amazon, Walmart, and others. This means we may earn a small commission if you make a purchase through our links, at no extra cost to you. This helps us keep Versusfy free and running.</p>
-              </div>
-              <div>
                 <h4 className="font-semibold text-neutral-900 dark:text-white">Is my data safe?</h4>
                 <p>Yes. Versusfy is built with a "Privacy by Design" approach. We do not store your search queries or personal information.</p>
-              </div>
-              <div className="bg-emerald-green/5 p-4 rounded-xl border border-emerald-green/20">
-                <h4 className="font-bold text-emerald-green mb-1">What are the benefits of buying through Versusfy?</h4>
-                <p className="text-sm">When you buy through us, you get access to <strong>exclusive, verified coupons</strong> and special <strong>GEO-targeted offers</strong> that aren't public. Additionally, we provide a <strong>Free Price Alert service</strong> for any product you purchase via our links, ensuring you're always informed about the best price—even after your search.</p>
-              </div>
-              <div className="bg-emerald-green/5 p-4 rounded-xl border border-emerald-green/20">
-                <h4 className="font-bold text-emerald-green mb-1">Is the Price Alert system really free?</h4>
-                <p className="text-sm">Yes! It is completely free as a "thank you" for supporting us. By using our comparison engine and purchasing links, you enable our team to negotiate better deals for the community, and in return, we provide you with state-of-the-art AI price and inventory tracking at no cost.</p>
               </div>
             </div>
           </motion.div>

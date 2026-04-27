@@ -140,7 +140,7 @@ async function startServer() {
     try {
       const ai = new GoogleGenAI({ apiKey });
       const response = await ai.models.generateContent({
-        model: model || "gemini-1.5-flash-latest",
+        model: model || "gemini-1.5-flash",
         contents: contents,
         config: config
       });
@@ -354,7 +354,7 @@ async function startServer() {
   }
 
   app.listen(parseInt(PORT as string), "0.0.0.0", () => {
-    console.log(`Versusfy Server v2.2.0-OMNI running on http://localhost:${PORT}`);
+    console.log(`Versusfy Server v2.2.0-OMNI running on https://localhost:${PORT}`);
     
     // Tactical Environment Check
     const check = (key: string) => (process.env[key] || process.env[`VITE_${key}`]) ? '✅ PRESENT' : '❌ MISSING';
